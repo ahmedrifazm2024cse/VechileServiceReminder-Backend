@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Service Reminder</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; margin: 0; padding: 0; background-color: #f4f7fa; }
+        .container { max-width: 600px; margin: 30px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+        .header { background: linear-gradient(135deg, #1e40af, #3b82f6); padding: 40px 30px; text-align: center; }
+        .header h1 { color: #fff; margin: 0; font-size: 24px; font-weight: 700; }
+        .header p { color: rgba(255,255,255,0.85); margin: 8px 0 0; font-size: 14px; }
+        .badge { display: inline-block; background: rgba(255,255,255,0.2); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 12px; margin-top: 12px; }
+        .body { padding: 36px 30px; }
+        .greeting { font-size: 18px; color: #1a202c; margin-bottom: 20px; }
+        .info-card { background: #f0f7ff; border-left: 4px solid #3b82f6; border-radius: 8px; padding: 20px; margin: 20px 0; }
+        .info-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+        .info-row:last-child { border-bottom: none; }
+        .info-label { color: #64748b; font-size: 13px; font-weight: 500; }
+        .info-value { color: #1e293b; font-size: 13px; font-weight: 600; }
+        .days-badge { display: inline-block; padding: 6px 16px; border-radius: 20px; font-weight: 700; font-size: 14px; margin: 16px 0; }
+        .days-urgent { background: #fef2f2; color: #dc2626; }
+        .days-warning { background: #fffbeb; color: #d97706; }
+        .days-normal { background: #f0fdf4; color: #16a34a; }
+        .cta-button { display: block; width: fit-content; margin: 24px auto; padding: 14px 32px; background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 15px; text-align: center; }
+        .footer { background: #f8fafc; padding: 24px 30px; text-align: center; border-top: 1px solid #e2e8f0; }
+        .footer p { color: #94a3b8; font-size: 12px; margin: 4px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🚗 Vehicle Service Reminder</h1>
+        <p>{{ app_name }}</p>
+        <span class="badge">Automated Reminder</span>
+    </div>
+    <div class="body">
+        <p class="greeting">Hello <strong>{{ user.full_name }}</strong>,</p>
+        <p style="color: #475569; line-height: 1.7;">
+            This is a friendly reminder that your vehicle requires a scheduled service. 
+            Please book your service appointment at the earliest convenience.
+        </p>
+
+        <div class="info-card">
+            <div class="info-row">
+                <span class="info-label">🚘 Vehicle</span>
+                <span class="info-value">{{ vehicle.name }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🔢 Registration No.</span>
+                <span class="info-value">{{ vehicle.registration_number }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">🏷️ Brand / Model</span>
+                <span class="info-value">{{ vehicle.brand }} {{ vehicle.model }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📅 Service Due Date</span>
+                <span class="info-value">{{ service_date }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">⏱️ Days Remaining</span>
+                <span class="info-value">
+                    {% if days_until <= 3 %}
+                        <span style="color: #dc2626; font-weight: 700;">{{ days_until }} day(s) — Urgent!</span>
+                    {% elif days_until <= 7 %}
+                        <span style="color: #d97706; font-weight: 700;">{{ days_until }} day(s)</span>
+                    {% else %}
+                        <span style="color: #16a34a; font-weight: 700;">{{ days_until }} day(s)</span>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">📏 Last Odometer</span>
+                <span class="info-value">{{ vehicle.odometer_reading }} km</span>
+            </div>
+        </div>
+
+        <a href="{{ frontend_url }}/vehicles/{{ vehicle.id }}" class="cta-button">
+            View Vehicle Details →
+        </a>
+
+        <p style="color: #94a3b8; font-size: 13px; text-align: center;">
+            Regular servicing keeps your vehicle running smoothly and safely.
+        </p>
+    </div>
+    <div class="footer">
+        <p>© {{ app_name }}. All rights reserved.</p>
+        <p>You are receiving this because you enabled service reminders for this vehicle.</p>
+        <p><a href="{{ frontend_url }}/reminder-settings" style="color: #3b82f6;">Manage Reminder Settings</a></p>
+    </div>
+</div>
+</body>
+</html>
